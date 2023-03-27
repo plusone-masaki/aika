@@ -1,0 +1,23 @@
+{
+  "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
+  "include": [
+    "node_modules/whatwg-fetch/*",
+    "src/common/**/*",
+    "src/common/**/*.d.ts",
+    "src/renderer/src/env.d.ts",
+    "src/renderer/**/*",
+    "src/preload/*.d.ts"
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "composite": true,
+    "baseUrl": ".",
+    "typeRoots": ["types"],
+    "paths": {
+      "whatwg-fetch": ["./node_modules/whatwg-fetch/fetch.js"],
+      "@common/*": ["./src/common/*"],
+      "@renderer/*": ["./src/renderer/src/*"],
+      "@framework/*": ["./src/renderer/cubism-framework/src/*"]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+node_modules
+*.log*
+*.secret*
+.cache
+.env
+out
+dist
+.DS_Store
+.idea
