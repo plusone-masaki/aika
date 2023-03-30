@@ -27,7 +27,6 @@ const bubblePosition = {
   top: window.innerHeight - 600 + 'px',
   left: window.innerWidth - 800 + 'px',
 }
-console.log('DOMPurify', DOMPurify)
 const formatValue = computed(() => DOMPurify.sanitize(marked.parse(props.modelValue)))
 
 onMounted(() => {

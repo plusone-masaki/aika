@@ -132,7 +132,6 @@ export class LAppModel extends CubismUserModel {
       // callback
       await this.loadCubismExpression();
       await this.loadCubismPhysics();
-      await this.loadCubismPhysics();
       await this.loadCubismPose();
       await this.setupEyeBlink();
       await this.setupBreath();
@@ -161,9 +160,8 @@ export class LAppModel extends CubismUserModel {
 
   // Expression
   private async loadCubismExpression (): Promise<void> {
-    if (this._modelSetting.getExpressionCount() > 0) {
-      const count: number = this._modelSetting.getExpressionCount();
-
+    const count: number = this._modelSetting.getExpressionCount();
+    if (count > 0) {
       for (let i = 0; i < count; i++) {
         const expressionName = this._modelSetting.getExpressionName(i);
         const expressionFileName =
@@ -188,11 +186,6 @@ export class LAppModel extends CubismUserModel {
         this._expressions.setValue(expressionName, motion);
 
         this._expressionCount++;
-
-        if (this._expressionCount >= count) {
-          this._state = LoadStep.LoadPhysics;
-          return
-        }
 
         // fetch(`${this._modelHomeDir}${expressionFileName}`)
         //   .then(response => response.arrayBuffer())
@@ -222,9 +215,8 @@ export class LAppModel extends CubismUserModel {
         //     }
         //   });
       }
-    } else {
-      this._state = LoadStep.LoadPhysics;
     }
+    this._state = LoadStep.LoadPhysics;
   };
 
   // Physics
@@ -236,7 +228,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, physicsFileName)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       this.loadPhysics(arrayBuffer, arrayBuffer.byteLength)
-      this._state = LoadStep.LoadPose;
 
       // fetch(`${this._modelHomeDir}${physicsFileName}`)
       //   .then(response => response.arrayBuffer())
@@ -249,9 +240,8 @@ export class LAppModel extends CubismUserModel {
       //     loadCubismPose();
       //   });
       // this._state = LoadStep.WaitLoadPhysics;
-    } else {
-      this._state = LoadStep.LoadPose;
     }
+    this._state = LoadStep.LoadPose;
   }
 
   // Pose
@@ -263,7 +253,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, poseFileName)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       this.loadPose(arrayBuffer, arrayBuffer.byteLength);
-      this._state = LoadStep.SetupEyeBlink;
 
       // fetch(`${this._modelHomeDir}${poseFileName}`)
       //   .then(response => response.arrayBuffer())
@@ -276,9 +265,8 @@ export class LAppModel extends CubismUserModel {
       //     setupEyeBlink();
       //   });
       // this._state = LoadStep.WaitLoadPose;
-    } else {
-      this._state = LoadStep.SetupEyeBlink;
     }
+    this._state = LoadStep.SetupEyeBlink;
   }
 
   // EyeBlink
@@ -331,7 +319,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, userDataFile)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       super.loadUserData(arrayBuffer, arrayBuffer.byteLength);
-      this._state = LoadStep.SetupEyeBlinkIds;
 
       // fetch(`${this._modelHomeDir}${userDataFile}`)
       //   .then(response => response.arrayBuffer())
@@ -345,9 +332,8 @@ export class LAppModel extends CubismUserModel {
       //   });
       //
       // this._state = LoadStep.WaitLoadUserData;
-    } else {
-      this._state = LoadStep.SetupEyeBlinkIds;
     }
+    this._state = LoadStep.SetupEyeBlinkIds;
   }
 
   // EyeBlinkIds
@@ -389,7 +375,7 @@ export class LAppModel extends CubismUserModel {
   }
 
   // Motion
-  private loadCubismMotion (): void {
+  private async loadCubismMotion (): Promise<void> {
     this._state = LoadStep.WaitLoadMotion;
     this._model.saveParameters();
     this._allMotionCount = 0;
@@ -397,6 +383,7 @@ export class LAppModel extends CubismUserModel {
     const group: string[] = [];
 
     const motionGroupCount: number = this._modelSetting.getMotionGroupCount();
+    console.log('motionGroupCount', motionGroupCount, group)
 
     // モーションの総数を求める
     for (let i = 0; i < motionGroupCount; i++) {
@@ -406,7 +393,7 @@ export class LAppModel extends CubismUserModel {
 
     // モーションの読み込み
     for (let i = 0; i < motionGroupCount; i++) {
-      this.preLoadMotionGroup(group[i]);
+      await this.preLoadMotionGroup(group[i]);
     }
 
     // モーションがない場合
@@ -420,7 +407,7 @@ export class LAppModel extends CubismUserModel {
       this._initialized = true;
 
       this.createRenderer();
-      this.setupTextures();
+      await this.setupTextures();
       this.getRenderer().startUp(gl);
     }
   }
@@ -841,7 +828,7 @@ export class LAppModel extends CubismUserModel {
         this._initialized = true;
 
         this.createRenderer();
-        this.setupTextures();
+        await this.setupTextures();
         this.getRenderer().startUp(gl);
       }
       // fetch(`${this._modelHomeDir}${motionFileName}`)

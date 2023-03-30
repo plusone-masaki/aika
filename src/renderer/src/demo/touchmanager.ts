@@ -96,6 +96,7 @@ export class TouchManager {
    * @param deviceY タッチした画面のyの値
    */
   public touchesBegan(deviceX: number, deviceY: number): void {
+    console.log('touchesBegan', deviceX, deviceY)
     this._lastX = deviceX;
     this._lastY = deviceY;
     this._startX = deviceX;

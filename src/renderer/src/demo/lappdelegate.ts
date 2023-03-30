@@ -87,18 +87,11 @@ export class LAppDelegate {
       canvas.addEventListener('touchmove', onTouchMoved)
       canvas.addEventListener('touchend', onTouchEnded)
       canvas.addEventListener('touchcancel', onTouchCancel)
-      // canvas.ontouchstart = onTouchBegan;
-      // canvas.ontouchmove = onTouchMoved;
-      // canvas.ontouchend = onTouchEnded;
-      // canvas.ontouchcancel = onTouchCancel;
     } else {
       // マウス関連コールバック関数登録
-      document.addEventListener('mousedown', onClickBegan)
-      document.addEventListener('mousemove', onMouseMoved)
-      document.addEventListener('mouseup', onClickEnded)
-      // canvas.onmousedown = onClickBegan;
-      // canvas.onmousemove = onMouseMoved;
-      // canvas.onmouseup = onClickEnded;
+      canvas.addEventListener('mousedown', onClickBegan)
+      canvas.addEventListener('mousemove', onMouseMoved)
+      canvas.addEventListener('mouseup', onClickEnded)
     }
 
     // AppViewの初期化
@@ -318,8 +311,9 @@ function onClickBegan(e: MouseEvent): void {
   }
   LAppDelegate.getInstance()._captured = true;
 
-  const posX: number = e.pageX;
-  const posY: number = e.pageY;
+  const rect = (e.target as Element).getBoundingClientRect();
+  const posX: number = e.clientX - rect.left;
+  const posY: number = e.clientY - rect.top;
 
   LAppDelegate.getInstance()._view.onTouchesBegan(posX, posY);
 }
@@ -372,8 +366,10 @@ function onTouchBegan(e: TouchEvent): void {
 
   LAppDelegate.getInstance()._captured = true;
 
-  const posX = e.changedTouches[0].pageX;
-  const posY = e.changedTouches[0].pageY;
+  const rect = (e.target as Element).getBoundingClientRect();
+
+  const posX = e.changedTouches[0].clientX - rect.left;
+  const posY = e.changedTouches[0].clientY - rect.top;
 
   LAppDelegate.getInstance()._view.onTouchesBegan(posX, posY);
 }
