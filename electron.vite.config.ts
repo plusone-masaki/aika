@@ -6,9 +6,9 @@ const config: UserConfig = {
   main: {
     plugins: [
       externalizeDepsPlugin(),
-      // bytecodePlugin({
-      //   transformArrowFunctions: false,
-      // }),
+      bytecodePlugin({
+        transformArrowFunctions: false,
+      }),
     ],
     resolve: {
       alias: {
@@ -44,6 +44,7 @@ const config: UserConfig = {
       },
     },
     build: {
+      outDir: 'web',
       modulePreload: {
         polyfill: true,
       },

@@ -15,6 +15,7 @@ const figure: ViewContext = {
   },
   hook: (window) => {
     window.setIgnoreMouseEvents(true, { forward: true })
+    window.setAlwaysOnTop(true, 'normal')
   },
 }
 

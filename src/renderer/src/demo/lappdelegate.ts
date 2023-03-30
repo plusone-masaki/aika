@@ -83,15 +83,22 @@ export class LAppDelegate {
 
     if (supportTouch) {
       // タッチ関連コールバック関数登録
-      canvas.ontouchstart = onTouchBegan;
-      canvas.ontouchmove = onTouchMoved;
-      canvas.ontouchend = onTouchEnded;
-      canvas.ontouchcancel = onTouchCancel;
+      canvas.addEventListener('touchstart', onTouchBegan)
+      canvas.addEventListener('touchmove', onTouchMoved)
+      canvas.addEventListener('touchend', onTouchEnded)
+      canvas.addEventListener('touchcancel', onTouchCancel)
+      // canvas.ontouchstart = onTouchBegan;
+      // canvas.ontouchmove = onTouchMoved;
+      // canvas.ontouchend = onTouchEnded;
+      // canvas.ontouchcancel = onTouchCancel;
     } else {
       // マウス関連コールバック関数登録
-      canvas.onmousedown = onClickBegan;
-      canvas.onmousemove = onMouseMoved;
-      canvas.onmouseup = onClickEnded;
+      document.addEventListener('mousedown', onClickBegan)
+      document.addEventListener('mousemove', onMouseMoved)
+      document.addEventListener('mouseup', onClickEnded)
+      // canvas.onmousedown = onClickBegan;
+      // canvas.onmousemove = onMouseMoved;
+      // canvas.onmouseup = onClickEnded;
     }
 
     // AppViewの初期化

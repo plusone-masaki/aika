@@ -115,6 +115,10 @@ export class LAppView {
    */
   public onTouchesBegan(pointX: number, pointY: number): void {
     this._touchManager.touchesBegan(pointX, pointY);
+
+    if (window.log.DEBUG_TOUCH_LOG_ENABLE) {
+      LAppPal.printMessage(`[APP]onTouchesBegan x: ${pointX} y: ${pointY}`);
+    }
   }
 
   /**

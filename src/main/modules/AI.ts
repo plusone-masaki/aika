@@ -1,6 +1,6 @@
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai'
 
-type AIModel = 'gpt-4'
+type ChatModel = 'gpt-4'
   | 'gpt-4-0314'
   | 'gpt-4-32k'
   | 'gpt-4-32k-0314'
@@ -10,10 +10,10 @@ type AIModel = 'gpt-4'
   | 'text-davinci-002'
   | 'code-davinci-002'
 
-export class AI {
+export default class AI {
   private readonly configuration: Configuration
   private readonly api: OpenAIApi
-  private readonly aiModel: AIModel = 'gpt-3.5-turbo'
+  private readonly chatModel: ChatModel = 'gpt-3.5-turbo'
 
   private name: string = 'はる'
   private age: number = 24
@@ -40,12 +40,12 @@ export class AI {
     this.api = new OpenAIApi(this.configuration)
   }
 
-  public async sendQuestion (content: string) {
+  public async sendMessage (content: string) {
     console.log('sendQuestion', content)
     if (!content) return
     const question: ChatCompletionRequestMessage = { role: 'user', content }
     const response = await this.api.createChatCompletion({
-      model: this.aiModel,
+      model: this.chatModel,
       messages: [
         ...this.chatHistory,
         question,

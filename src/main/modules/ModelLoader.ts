@@ -9,8 +9,8 @@ export default class ModelLoader {
     filepath = filepath.replace('..', '')
 
     const path = app.isPackaged
-      ? join(__dirname, '..', '..', 'resources', name, filepath)
-      : resolve('resources', name, filepath)
+      ? join(__dirname, '..', '..', 'resources', 'models', name, filepath)
+      : resolve('resources', 'models', name, filepath)
     if (!existsSync(path)) throw new Error(`File ${path} is not found.${__dirname}`)
 
     return readFileSync(path)
