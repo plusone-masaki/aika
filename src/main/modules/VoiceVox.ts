@@ -1,4 +1,4 @@
-import { exec } from 'child_process'
+import { ChildProcess, exec } from 'child_process'
 import { join, resolve } from 'path'
 import * as qs from 'querystring'
 // import download from 'download'
@@ -8,9 +8,10 @@ import axios from 'axios'
 export default class VoiceVox {
   private readonly baseUrl = 'http://localhost:50021'
   // private readonly apiRepository = 'https://api.github.com/repos/VOICEVOX'
+  private process?: ChildProcess
 
   public async initialize () {
-    await this.startVoicevoxServer()
+    await this.up()
   }
 
   public async read (text: string) {
@@ -32,11 +33,17 @@ export default class VoiceVox {
     }
   }
 
-  private async startVoicevoxServer () {
+  public up () {
     const path = app.isPackaged
       ? join(__dirname, '..', '..', 'resources', 'voicevox', 'voicevox_engine', 'run.exe')
       : resolve('resources', 'voicevox', 'voicevox_engine', 'run.exe')
-    exec(path)
+    this.process = exec(path)
+  }
+
+  public down () {
+    if (this.process?.pid) {
+      process.kill(this.process.pid)
+    }
   }
 
   // private async downloadCoreLibrary () {
