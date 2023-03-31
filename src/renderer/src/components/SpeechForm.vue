@@ -4,7 +4,7 @@ form.speech-form(
   :style="speechFormPosition"
   @submit.stop.prevent="emit('submit')"
 )
-  input.speech-form__input(
+  textarea.speech-form__input(
     v-model="value"
   )
   button.speech-form__submit(

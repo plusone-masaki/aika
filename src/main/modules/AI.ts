@@ -15,10 +15,10 @@ export default class AI {
   private readonly api: OpenAIApi
   private readonly chatModel: ChatModel = 'gpt-3.5-turbo'
 
-  private name: string = 'はる'
-  private age: number = 24
-  private gender: '男性'|'女性' = '女性'
-  private tone: string = '丁寧語'
+  private name: string = 'ひより'
+  private age: number = 16
+  private gender: string = '女性'
+  private tone: string = 'フレンドリー'
 
   private chatHistory: ChatCompletionRequestMessage[] = [
     { role: 'user', content: this.profile },
@@ -41,7 +41,7 @@ export default class AI {
   }
 
   public async sendMessage (content: string) {
-    console.log('sendQuestion', content)
+    console.log('message', content)
     if (!content) return
     const question: ChatCompletionRequestMessage = { role: 'user', content }
     const response = await this.api.createChatCompletion({

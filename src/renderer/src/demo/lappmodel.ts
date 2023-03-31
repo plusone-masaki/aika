@@ -383,7 +383,6 @@ export class LAppModel extends CubismUserModel {
     const group: string[] = [];
 
     const motionGroupCount: number = this._modelSetting.getMotionGroupCount();
-    console.log('motionGroupCount', motionGroupCount, group)
 
     // モーションの総数を求める
     for (let i = 0; i < motionGroupCount; i++) {
@@ -550,7 +549,7 @@ export class LAppModel extends CubismUserModel {
 
     // リップシンクの設定
     if (this._lipsync) {
-      let value = 0.0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
+      let value: number; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
 
       this._wavFileHandler.update(deltaTimeSeconds);
       value = this._wavFileHandler.getRms();

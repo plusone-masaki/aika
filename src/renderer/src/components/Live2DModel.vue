@@ -16,11 +16,11 @@ import live2d from '../demo/main'
 const canvas = ref<HTMLCanvasElement>()
 const canvasSize = reactive({
   height: '640px',
-  width: '480px',
+  width: '360px',
 })
 const canvasPosition = {
   top: window.innerHeight - parseInt(canvasSize.height) - 128 + 'px',
-  left: window.innerWidth - parseInt(canvasSize.width) + 'px',
+  left: window.innerWidth - parseInt(canvasSize.width) * 1.5 + 'px',
 }
 
 onUpdated(async () => {

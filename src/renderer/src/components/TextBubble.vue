@@ -4,7 +4,7 @@ div.text-bubble(
   v-html="formatValue"
   ref="bubble"
   :style="bubblePosition"
-  @dblclick="emit('update:modelValue', '')"
+  @dblclick="closeBubble"
 )
 </template>
 
@@ -28,6 +28,10 @@ const bubblePosition = {
   left: window.innerWidth - 800 + 'px',
 }
 const formatValue = computed(() => DOMPurify.sanitize(marked.parse(props.modelValue)))
+const closeBubble = () => {
+  emit('update:modelValue', '')
+  window.system.clickThrough(true)
+}
 
 onMounted(() => {
   clickThrough(bubble.value!)

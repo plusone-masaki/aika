@@ -19,5 +19,4 @@ contextBridge.exposeInMainWorld('api', {
   getModelList: () => ipcRenderer.invoke(api.GET_MODEL_LIST),
   getModelData: (name: string, filepath: string) => ipcRenderer.invoke(api.GET_MODEL_DATA, name, filepath),
   sendMessage: (message: string) => ipcRenderer.invoke(api.SEND_MESSAGE, message),
-  readMessage: (message: string) => ipcRenderer.invoke(api.READ_MESSAGE, message),
 })

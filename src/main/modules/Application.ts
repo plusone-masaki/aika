@@ -79,6 +79,7 @@ export default class Application {
 
   public async start () {
     // 音声読み上げ機能の初期化
+    await this.voiceVox.initialize()
     this.voiceVox.up()
 
     // アプリをタスクトレイに格納
