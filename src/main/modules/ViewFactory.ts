@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { app, BrowserWindow } from 'electron'
 import { ViewType, ViewContext } from '@common/@types/view'
-import figure from '@main/views/figure'
+import figure from '@main/views/index'
 
 export default class ViewFactory {
   private readonly windows: Record<ViewType, ViewContext> = {

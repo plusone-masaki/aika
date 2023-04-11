@@ -4,10 +4,6 @@
  * Use of this source code is governed by the Live2D Open Software license
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
-
-// @ts-ignore
-// import _ from 'whatwg-fetch';
-
 import { CubismDefaultParameterId } from '@framework/cubismdefaultparameterid';
 import { CubismModelSettingJson } from '@framework/cubismmodelsettingjson';
 import {
@@ -89,22 +85,6 @@ export class LAppModel extends CubismUserModel {
     )
     this._state = LoadStep.LoadModel
     this.setupModel(setting)
-
-    // fetch(`${this._modelHomeDir}${fileName}`)
-    //   .then(response => response.arrayBuffer())
-    //   .then(arrayBuffer => {
-    //     console.log('loadAssets: ', `${this._modelHomeDir}${fileName}`)
-    //     const setting: ICubismModelSetting = new CubismModelSettingJson(
-    //       arrayBuffer,
-    //       arrayBuffer.byteLength
-    //     );
-    //
-    //     // ステートを更新
-    //     this._state = LoadStep.LoadModel;
-    //
-    //     // 結果を保存
-    //     this.setupModel(setting);
-    //   });
   }
 
   /**
@@ -140,19 +120,6 @@ export class LAppModel extends CubismUserModel {
       await this.setupLipSyncIds();
       await this.setupLayout();
       await this.loadCubismMotion();
-
-      // fetch(`${this._modelHomeDir}${modelFileName}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     console.log('MODEL FETCHED: ', `${this._modelHomeDir}${modelFileName}`, arrayBuffer)
-      //     this.loadModel(arrayBuffer);
-      //     this._state = LoadStep.LoadExpression;
-      //
-      //     // callback
-      //     loadCubismExpression();
-      //   });
-      //
-      // this._state = LoadStep.WaitLoadModel;
     } else {
       LAppPal.printMessage('Model data does not exist.');
     }
@@ -186,34 +153,6 @@ export class LAppModel extends CubismUserModel {
         this._expressions.setValue(expressionName, motion);
 
         this._expressionCount++;
-
-        // fetch(`${this._modelHomeDir}${expressionFileName}`)
-        //   .then(response => response.arrayBuffer())
-        //   .then(arrayBuffer => {
-        //     const motion: ACubismMotion = this.loadExpression(
-        //       arrayBuffer,
-        //       arrayBuffer.byteLength,
-        //       expressionName
-        //     );
-        //
-        //     if (this._expressions.getValue(expressionName) != null) {
-        //       ACubismMotion.delete(
-        //         this._expressions.getValue(expressionName)
-        //       );
-        //       this._expressions.setValue(expressionName, null as any);
-        //     }
-        //
-        //     this._expressions.setValue(expressionName, motion);
-        //
-        //     this._expressionCount++;
-        //
-        //     if (this._expressionCount >= count) {
-        //       this._state = LoadStep.LoadPhysics;
-        //
-        //       // callback
-        //       loadCubismPhysics();
-        //     }
-        //   });
       }
     }
     this._state = LoadStep.LoadPhysics;
@@ -228,18 +167,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, physicsFileName)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       this.loadPhysics(arrayBuffer, arrayBuffer.byteLength)
-
-      // fetch(`${this._modelHomeDir}${physicsFileName}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     this.loadPhysics(arrayBuffer, arrayBuffer.byteLength);
-      //
-      //     this._state = LoadStep.LoadPose;
-      //
-      //     // callback
-      //     loadCubismPose();
-      //   });
-      // this._state = LoadStep.WaitLoadPhysics;
     }
     this._state = LoadStep.LoadPose;
   }
@@ -253,18 +180,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, poseFileName)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       this.loadPose(arrayBuffer, arrayBuffer.byteLength);
-
-      // fetch(`${this._modelHomeDir}${poseFileName}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     this.loadPose(arrayBuffer, arrayBuffer.byteLength);
-      //
-      //     this._state = LoadStep.SetupEyeBlink;
-      //
-      //     // callback
-      //     setupEyeBlink();
-      //   });
-      // this._state = LoadStep.WaitLoadPose;
     }
     this._state = LoadStep.SetupEyeBlink;
   }
@@ -319,19 +234,6 @@ export class LAppModel extends CubismUserModel {
       const model = await window.api.getModelData(this._modelHomeDir, userDataFile)
       const arrayBuffer = await (new Blob([model])).arrayBuffer()
       super.loadUserData(arrayBuffer, arrayBuffer.byteLength);
-
-      // fetch(`${this._modelHomeDir}${userDataFile}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     super.loadUserData(arrayBuffer, arrayBuffer.byteLength);
-      //
-      //     this._state = LoadStep.SetupEyeBlinkIds;
-      //
-      //     // callback
-      //     setupEyeBlinkIds();
-      //   });
-      //
-      // this._state = LoadStep.WaitLoadUserData;
     }
     this._state = LoadStep.SetupEyeBlinkIds;
   }
@@ -624,33 +526,6 @@ export class LAppModel extends CubismUserModel {
           motion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
           autoDelete = true; // 終了時にメモリから削除
         })
-
-      // fetch(`${this._modelHomeDir}${motionFileName}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     motion = this.loadMotion(
-      //       arrayBuffer,
-      //       arrayBuffer.byteLength,
-      //       null as any,
-      //       onFinishedMotionHandler
-      //     );
-      //     let fadeTime: number = this._modelSetting.getMotionFadeInTimeValue(
-      //       group,
-      //       no
-      //     );
-      //
-      //     if (fadeTime >= 0.0) {
-      //       motion.setFadeInTime(fadeTime);
-      //     }
-      //
-      //     fadeTime = this._modelSetting.getMotionFadeOutTimeValue(group, no);
-      //     if (fadeTime >= 0.0) {
-      //       motion.setFadeOutTime(fadeTime);
-      //     }
-      //
-      //     motion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
-      //     autoDelete = true; // 終了時にメモリから削除
-      //   });
     } else {
       motion.setFinishedMotionHandler(onFinishedMotionHandler as any);
     }
@@ -830,47 +705,6 @@ export class LAppModel extends CubismUserModel {
         await this.setupTextures();
         this.getRenderer().startUp(gl);
       }
-      // fetch(`${this._modelHomeDir}${motionFileName}`)
-      //   .then(response => response.arrayBuffer())
-      //   .then(arrayBuffer => {
-      //     const tmpMotion: CubismMotion = this.loadMotion(
-      //       arrayBuffer,
-      //       arrayBuffer.byteLength,
-      //       name
-      //     );
-      //
-      //     let fadeTime = this._modelSetting.getMotionFadeInTimeValue(group, i);
-      //     if (fadeTime >= 0.0) {
-      //       tmpMotion.setFadeInTime(fadeTime);
-      //     }
-      //
-      //     fadeTime = this._modelSetting.getMotionFadeOutTimeValue(group, i);
-      //     if (fadeTime >= 0.0) {
-      //       tmpMotion.setFadeOutTime(fadeTime);
-      //     }
-      //     tmpMotion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
-      //
-      //     if (this._motions.getValue(name) != null) {
-      //       ACubismMotion.delete(this._motions.getValue(name));
-      //     }
-      //
-      //     this._motions.setValue(name, tmpMotion);
-      //
-      //     this._motionCount++;
-      //     if (this._motionCount >= this._allMotionCount) {
-      //       this._state = LoadStep.LoadTexture;
-      //
-      //       // 全てのモーションを停止する
-      //       this._motionManager.stopAllMotions();
-      //
-      //       this._updating = false;
-      //       this._initialized = true;
-      //
-      //       this.createRenderer();
-      //       this.setupTextures();
-      //       this.getRenderer().startUp(gl);
-      //     }
-      //   });
     }
   }
 

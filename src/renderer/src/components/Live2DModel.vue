@@ -19,7 +19,7 @@ const canvasSize = reactive({
   width: '360px',
 })
 const canvasPosition = {
-  top: window.innerHeight - parseInt(canvasSize.height) - 128 + 'px',
+  top: window.innerHeight - parseInt(canvasSize.height) - 144 + 'px',
   left: window.innerWidth - parseInt(canvasSize.width) * 1.5 + 'px',
 }
 

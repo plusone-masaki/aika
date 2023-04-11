@@ -19,7 +19,7 @@ export default (canvas: HTMLCanvasElement) => {
   /**
    * Process when changing screen size.
    */
-  window.onresize = () => {
+  canvas.onresize = () => {
     LAppDelegate.getInstance().onResize();
   };
 

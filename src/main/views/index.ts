@@ -2,18 +2,25 @@ import { join } from 'path'
 import { BrowserWindow } from 'electron'
 import { ViewContext } from '@common/@types/view'
 
-const figure: ViewContext = {
+// const displays = screen.getAllDisplays()
+
+const index: ViewContext = {
   options: {
     alwaysOnTop: true,
     frame: false,
     fullscreen: true,
     transparent: true,
-    useContentSize: true,
+    resizable: false,
+    useContentSize: false,
+    hasShadow: false,
     skipTaskbar: true,
     show: false,
+    vibrancy: 'light',
+    // width: displays.reduce((width, display) => width + display.bounds.width, 0),
+    // height: displays.reduce((width, display) => width + display.bounds.height, 0),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      additionalArguments: ['figure'],
+      additionalArguments: ['/'],
     },
   },
   hook: (window: BrowserWindow) => {
@@ -23,4 +30,4 @@ const figure: ViewContext = {
   },
 }
 
-export default figure
+export default index

@@ -4,16 +4,21 @@ form.speech-form(
   :style="speechFormPosition"
   @submit.stop.prevent="emit('submit')"
 )
-  textarea.speech-form__input(
-    v-model="value"
-  )
+  div.speech-form__input
+    textarea.speech-form__textarea(
+      v-model="value"
+      ref="textarea"
+      :style="{ height: textareaHeight }"
+      @keydown.ctrl.enter="emit('submit')"
+      @keydown.meta.enter="emit('submit')"
+    )
   button.speech-form__submit(
     type="submit"
   ) 送信
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import clickThrough from '../composables/clickThrough'
 import movableDom from '../composables/movableDom'
 
@@ -27,9 +32,10 @@ const emit = defineEmits<{
 
 const speechForm = ref<HTMLFormElement>()
 const speechFormPosition = {
-  top: window.innerHeight - 120 + 'px',
+  bottom: 96 + 'px',
   left: window.innerWidth - 600 + 'px',
 }
+const textarea = ref<HTMLTextAreaElement>()
 
 const value = computed({
   get () {
@@ -40,6 +46,17 @@ const value = computed({
   },
 })
 
+const textareaHeight = ref<string>('auto')
+watch(() => props.modelValue, async () => {
+  textareaHeight.value = 'auto'
+  console.log(textarea.value.scrollHeight)
+  if (textarea.value) {
+    await nextTick()
+    console.log(textarea.value.scrollHeight)
+    textareaHeight.value = textarea.value.scrollHeight + 'px'
+  }
+})
+
 onMounted(() => {
   clickThrough(speechForm.value!)
   movableDom(speechForm.value!)
@@ -48,18 +65,30 @@ onMounted(() => {
 
 <style lang="sass" scoped>
 .speech-form
+  align-items: end
   display: flex
   justify-content: space-between
   position: fixed
   width: 400px
 
 .speech-form__input
+  background: rgba(255, 255, 255, 1)
   border: 1px solid rgba(244, 244, 244, 0.87)
+  border-radius: 2px
+  box-sizing: border-box
+  display: inline-block
+  height: min-content
+  line-height: 0
+  padding: 6px 4px
+
+.speech-form__textarea
+  border: none
   box-sizing: border-box
   font-size: 16px
-  height: 32px
-  padding: 2px 4px
+  line-height: 1.2em
   outline: none
+  padding: 0
+  resize: none
   width: 320px
 
 .speech-form__submit

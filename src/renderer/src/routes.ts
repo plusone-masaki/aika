@@ -1,7 +1,7 @@
-import FigureView from './pages/FigureView.vue'
+import IndexView from './pages/index.vue'
 
 const routes = [
-  { path: '/figure', component: FigureView },
+  { path: '/', component: IndexView },
 ]
 
 export default routes
