@@ -1,16 +1,14 @@
 <template lang="pug">
 main.figure-view.fullscreen
-  Live2DModel
+  Live2DModel(
+    v-model:voice="voice"
+  )
   text-bubble(
     v-model="response"
   )
   speech-form(
     v-model="query"
     @submit="submit"
-  )
-  audio(
-    ref="audio"
-    autoplay
   )
 </template>
 
@@ -25,23 +23,20 @@ import RepositoryFactory from '../repositories/repositoryFactory'
 
 const voiceRepository = RepositoryFactory.get('voice')
 
-const audio = ref<HTMLAudioElement>()
 const query = ref<string>('')
 const response = ref<string>('')
+// const audioSourceUrl = ref<string>('')
+const voice = ref<ArrayBuffer>()
 const submit = async () => {
   if (!query.value) return
   const message = query.value
   query.value = ''
   response.value = await window.api.sendMessage(message)
-  const voice = await voiceRepository.getSpeechVoice(response.value, 0)
+  // const voice = await voiceRepository.getSpeechVoice(response.value, 0)
 
-  audio.value!.src = URL.createObjectURL(voice)
+  voice.value = await voiceRepository.getSpeechVoice(response.value, 10)
+  // audioSourceUrl.value = URL.createObjectURL(voice)
 }
-
-onMounted(() => {
-  clickThrough(audio.value!)
-  movableDom(audio.value!)
-})
 </script>
 
 <style lang="sass" scoped>

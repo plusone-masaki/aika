@@ -49,10 +49,8 @@ const value = computed({
 const textareaHeight = ref<string>('auto')
 watch(() => props.modelValue, async () => {
   textareaHeight.value = 'auto'
-  console.log(textarea.value.scrollHeight)
   if (textarea.value) {
     await nextTick()
-    console.log(textarea.value.scrollHeight)
     textareaHeight.value = textarea.value.scrollHeight + 'px'
   }
 })

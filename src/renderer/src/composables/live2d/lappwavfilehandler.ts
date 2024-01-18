@@ -84,7 +84,8 @@ export class LAppWavFileHandler {
     return true;
   }
 
-  public start(filePath: string): void {
+  // public start(filePath: string): void {
+  public start(buffer: ArrayBuffer): void {
     // サンプル位参照位置を初期化
     this._sampleOffset = 0;
     this._userTimeSeconds = 0.0;
@@ -92,7 +93,7 @@ export class LAppWavFileHandler {
     // RMS値をリセット
     this._lastRms = 0.0;
 
-    if (!this.loadWavFile(filePath)) {
+    if (!this.loadWavFile(buffer)) {
       return;
     }
   }
@@ -101,7 +102,8 @@ export class LAppWavFileHandler {
     return this._lastRms;
   }
 
-  public loadWavFile(filePath: string): boolean {
+  // public loadWavFile(filePath: string): boolean {
+  public loadWavFile(buffer: ArrayBuffer): boolean {
     let ret = false;
 
     if (this._pcmData != null) {
@@ -109,29 +111,24 @@ export class LAppWavFileHandler {
     }
 
     // ファイルロード
-    const asyncFileLoad = async () => {
-      return fetch(filePath).then(responce => {
-        return responce.arrayBuffer();
-      });
-    };
+    // const asyncFileLoad = async () => (await fetch(filePath)).arrayBuffer();
 
     // @ts-ignore
-    const asyncWavFileManager = (async () => {
-      this._byteReader._fileByte = await asyncFileLoad();
+    const asyncWavFileManager = async () => {
+      // this._byteReader._fileByte = await asyncFileLoad();
+      this._byteReader._fileByte = buffer;
       this._byteReader._fileDataView = new DataView(this._byteReader._fileByte);
       this._byteReader._fileSize = this._byteReader._fileByte.byteLength;
       this._byteReader._readOffset = 0;
 
       // ファイルロードに失敗しているか、先頭のシグネチャ"RIFF"を入れるサイズもない場合は失敗
-      if (
-        this._byteReader._fileByte == null ||
-        this._byteReader._fileSize < 4
-      ) {
+      if (this._byteReader._fileSize < 4) {
         return false;
       }
 
       // ファイル名
-      this._wavFileInfo._fileName = filePath;
+      // this._wavFileInfo._fileName = filePath;
+      this._wavFileInfo._fileName = 'voice';
 
       try {
         // シグネチャ "RIFF"
@@ -224,7 +221,8 @@ export class LAppWavFileHandler {
       } catch (e) {
         console.log(e);
       }
-    })();
+    }
+    asyncWavFileManager();
 
     return ret;
   }
@@ -363,9 +361,9 @@ export class ByteReader {
 
   /**
    * @brief シグネチャの取得と参照文字列との一致チェック
-   * @param[in] reference 検査対象のシグネチャ文字列
-   * @retval  true    一致している
-   * @retval  false   一致していない
+   * @param {string} reference 検査対象のシグネチャ文字列
+   * @return  true    一致している
+   * @return  false   一致していない
    */
   public getCheckSignature(reference: string): boolean {
     const getSignature: Uint8Array = new Uint8Array(4);

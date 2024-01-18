@@ -454,7 +454,7 @@ export class LAppModel extends CubismUserModel {
       let value: number; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
 
       this._wavFileHandler.update(deltaTimeSeconds);
-      value = this._wavFileHandler.getRms();
+      value = this._wavFileHandler.getRms() * 10;
 
       for (let i = 0; i < this._lipSyncIds.getSize(); ++i) {
         this._model.addParameterValueById(this._lipSyncIds.at(i), value, 0.8);
@@ -528,14 +528,6 @@ export class LAppModel extends CubismUserModel {
         })
     } else {
       motion.setFinishedMotionHandler(onFinishedMotionHandler as any);
-    }
-
-    //voice
-    const voice = this._modelSetting.getMotionSoundFileName(group, no);
-    if (voice.localeCompare('') != 0) {
-      let path = voice;
-      path = this._modelHomeDir + path;
-      this._wavFileHandler.start(path);
     }
 
     if (this._debugMode) {
@@ -796,7 +788,7 @@ export class LAppModel extends CubismUserModel {
     this._textureCount = 0;
     this._motionCount = 0;
     this._allMotionCount = 0;
-    this._wavFileHandler = new LAppWavFileHandler();
+    this._wavFileHandler = LAppWavFileHandler.getInstance();
   }
 
   _modelSetting: ICubismModelSetting; // モデルセッティング情報
